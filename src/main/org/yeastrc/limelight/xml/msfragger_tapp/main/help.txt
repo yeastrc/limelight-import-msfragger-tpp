@@ -1,0 +1,16 @@
+Description: Convert the results of a Magnum TPP analysis into limelight XML
+             suitable for import into the limelight web application.
+
+Usage: java -jar magnumTPP2LimelightXML.jar.jar -m path -p path -f path -o path
+
+Example: java -jar magnumTPP2LimelightXML.jar -m /path/to/magnum.conf
+                                       -o /path/to/output.limelight.xml
+                                       -p /path/to/pepXML.xml
+                                       -f /path/to/fasta.fa
+
+Options:
+	-m	[Required] Path to Magnum .conf file
+	-o	[Required] Path to use for the limelight XML output file
+	-f	[Required] Path to FASTA file used in the experiment.
+	-p	[Required] Path to pepXML file
+
