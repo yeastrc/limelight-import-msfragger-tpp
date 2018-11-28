@@ -15,6 +15,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.Math.toIntExact;
@@ -209,10 +210,11 @@ public class TPPParsingUtils {
 		
 		psm.setPeptideSequence( searchHit.getPeptide() );
 		
-		psm.setxCorr( getScoreForType( searchHit, "magnum_score" ) );
-		psm.setDeltaCn( getScoreForType( searchHit, "delta_score" ) );
+		psm.setHyperScore( getScoreForType( searchHit, "hyperscore" ) );
+		psm.setNextScore( getScoreForType( searchHit, "nextscore" ) );
 		psm.seteValue( getScoreForType( searchHit, "e_value" ) );
-		psm.setPpmError( getScoreForType( searchHit, "ppm_error" ) );
+
+		psm.setMassDiff( getMassDiffForSearchHit( searchHit ) );
 
 		psm.setPeptideProphetProbability( getPeptideProphetProbabilityForSearchHit( searchHit ) );
 		
@@ -343,6 +345,44 @@ public class TPPParsingUtils {
 		}
 		
 		return modMap;
+	}
+
+	/**
+	 * Get the mass diff reported for the search hit
+	 *
+	 * @param searchHit
+	 * @return
+	 * @throws Throwable
+	 */
+	public static BigDecimal getMassDiffForSearchHit( SearchHit searchHit ) throws Throwable {
+
+		return searchHit.getMassdiff();
+
+	}
+
+	/**
+	 * Get the mass diff reported for the search hit
+	 *
+	 * @param searchHit
+	 * @return
+	 * @throws Throwable
+	 */
+	public static String getPTMProphetPeptideStringForSearchHit( SearchHit searchHit ) throws Throwable {
+
+		List<AnalysisResult> analysisResults = searchHit.getAnalysisResult();
+		if( analysisResults != null ) {
+			for( AnalysisResult analysisResult : analysisResults ) {
+
+				if( analysisResult.getAnalysis().equals( "ptmprophet" ) ) {
+
+
+				}
+			}
+		}
+
+
+		return null;
+
 	}
 	
 	

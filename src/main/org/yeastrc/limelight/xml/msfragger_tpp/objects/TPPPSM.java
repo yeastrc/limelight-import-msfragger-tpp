@@ -5,16 +5,18 @@ import java.util.Map;
 
 public class TPPPSM {
 
-	private BigDecimal xCorr;
-	private BigDecimal deltaCn;
+	private BigDecimal hyperScore;
+	private BigDecimal nextScore;
 	private BigDecimal eValue;
-	private BigDecimal ppmError;
+	private BigDecimal massDiff;
 	
 	private BigDecimal peptideProphetProbability;
 	private BigDecimal interProphetProbability;
-	
+
+	private BigDecimal positionProbability;		// from PTM prophet
+	private String ptmProphetPeptideString;		// from PTM prophet
+
 	private int hitRank;
-	
 	
 	private int scanNumber;
 	private BigDecimal precursorNeutralMass;
@@ -28,28 +30,44 @@ public class TPPPSM {
 	private BigDecimal peptideProphetFDR;
 	private BigDecimal interProphetFDR;
 
-    public BigDecimal getPpmError() {
-        return ppmError;
-    }
-
-    public void setPpmError(BigDecimal ppmError) {
-        this.ppmError = ppmError;
-    }
-
-    public BigDecimal getxCorr() {
-		return xCorr;
+	public String getPtmProphetPeptideString() {
+		return ptmProphetPeptideString;
 	}
 
-	public void setxCorr(BigDecimal xCorr) {
-		this.xCorr = xCorr;
+	public void setPtmProphetPeptideString(String ptmProphetPeptideString) {
+		this.ptmProphetPeptideString = ptmProphetPeptideString;
 	}
 
-	public BigDecimal getDeltaCn() {
-		return deltaCn;
+	public BigDecimal getHyperScore() {
+		return hyperScore;
 	}
 
-	public void setDeltaCn(BigDecimal deltaCn) {
-		this.deltaCn = deltaCn;
+	public void setHyperScore(BigDecimal hyperScore) {
+		this.hyperScore = hyperScore;
+	}
+
+	public BigDecimal getNextScore() {
+		return nextScore;
+	}
+
+	public void setNextScore(BigDecimal nextScore) {
+		this.nextScore = nextScore;
+	}
+
+	public BigDecimal getMassDiff() {
+		return massDiff;
+	}
+
+	public void setMassDiff(BigDecimal massDiff) {
+		this.massDiff = massDiff;
+	}
+
+	public BigDecimal getPositionProbability() {
+		return positionProbability;
+	}
+
+	public void setPositionProbability(BigDecimal positionProbability) {
+		this.positionProbability = positionProbability;
 	}
 
 	public BigDecimal geteValue() {
