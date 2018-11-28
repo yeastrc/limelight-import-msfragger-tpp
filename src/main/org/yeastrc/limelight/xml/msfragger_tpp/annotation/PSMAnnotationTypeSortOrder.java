@@ -48,8 +48,8 @@ public class PSMAnnotationTypeSortOrder {
 		
 		{
 			SearchAnnotation annotation = new SearchAnnotation();
-			annotation.setAnnotationName( PSMAnnotationTypes.MAGNUM_ANNOTATION_TYPE_EVALUE );
-			annotation.setSearchProgram( Constants.PROGRAM_NAME_MAGNUM );
+			annotation.setAnnotationName( PSMAnnotationTypes.MSFRAGGER_ANNOTATION_TYPE_EVALUE );
+			annotation.setSearchProgram( Constants.PROGRAM_NAME_MSFRAGGER );
 			annotations.add( annotation );
 		}
 

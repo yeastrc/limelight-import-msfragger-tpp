@@ -13,10 +13,10 @@ public class PSMAnnotationTypes {
 
 	// comet scores
 	// magnum scores
-	public static final String MAGNUM_ANNOTATION_TYPE_EVALUE = "E-Value";
-	public static final String MAGNUM_ANNOTATION_TYPE_SCORE = "Score";
-	public static final String MAGNUM_ANNOTATION_TYPE_DSCORE = "dScore";
-	public static final String MAGNUM_ANNOTATION_TYPE_PPMERROR = "PPM Error";
+	public static final String MSFRAGGER_ANNOTATION_TYPE_EVALUE = "E-Value";
+	public static final String MSFRAGGER_ANNOTATION_TYPE_HYPERSCORE = "hyperscore";
+	public static final String MSFRAGGER_ANNOTATION_TYPE_DELTASCORE = "deltascore";
+	public static final String MSFRAGGER_ANNOTATION_TYPE_MASSDIFF = "Mass Diff";
 	
 	// PeptideProphet scores
 	public static final String PPROPHET_ANNOTATION_TYPE_SCORE = "Probability Score";
@@ -29,11 +29,11 @@ public class PSMAnnotationTypes {
 	public static List<FilterablePsmAnnotationType> getFilterablePsmAnnotationTypes( String programName ) {
 		List<FilterablePsmAnnotationType> types = new ArrayList<FilterablePsmAnnotationType>();
 
-		if( programName.equals( Constants.PROGRAM_NAME_MAGNUM ) ) {
+		if( programName.equals( Constants.PROGRAM_NAME_MSFRAGGER ) ) {
 
 			{
 				FilterablePsmAnnotationType type = new FilterablePsmAnnotationType();
-				type.setName( MAGNUM_ANNOTATION_TYPE_EVALUE );
+				type.setName( MSFRAGGER_ANNOTATION_TYPE_EVALUE );
 				type.setDescription( "Expect value" );
 				type.setFilterDirection( FilterDirectionType.BELOW );
 
@@ -42,8 +42,8 @@ public class PSMAnnotationTypes {
 
 			{
 				FilterablePsmAnnotationType type = new FilterablePsmAnnotationType();
-				type.setName( MAGNUM_ANNOTATION_TYPE_SCORE );
-				type.setDescription( "Cross-correlation coefficient" );
+				type.setName( MSFRAGGER_ANNOTATION_TYPE_HYPERSCORE );
+				type.setDescription( "Similar to scoring done in X! Tandem. See: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5409104/" );
 				type.setFilterDirection( FilterDirectionType.ABOVE );
 
 				types.add( type );
@@ -51,8 +51,8 @@ public class PSMAnnotationTypes {
 
 			{
 				FilterablePsmAnnotationType type = new FilterablePsmAnnotationType();
-				type.setName( MAGNUM_ANNOTATION_TYPE_DSCORE );
-				type.setDescription( "Difference between the XCorr of this PSM and the next best PSM (with a dissimilar peptide)" );
+				type.setName( MSFRAGGER_ANNOTATION_TYPE_DELTASCORE );
+				type.setDescription( "Difference in hyperscore between top and next hit." );
 				type.setFilterDirection( FilterDirectionType.ABOVE );
 
 				types.add( type );
@@ -60,8 +60,8 @@ public class PSMAnnotationTypes {
 
 			{
 				FilterablePsmAnnotationType type = new FilterablePsmAnnotationType();
-				type.setName( MAGNUM_ANNOTATION_TYPE_PPMERROR );
-				type.setDescription( "PPM Error, as calculated by " + Constants.PROGRAM_NAME_MAGNUM );
+				type.setName( MSFRAGGER_ANNOTATION_TYPE_MASSDIFF );
+				type.setDescription( "Mass diff, as calculated by " + Constants.PROGRAM_NAME_MSFRAGGER );
 				type.setFilterDirection( FilterDirectionType.ABOVE );
 
 				types.add( type );

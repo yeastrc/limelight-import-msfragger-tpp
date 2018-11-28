@@ -8,14 +8,15 @@ import net.systemsbiology.regis_web.pepxml.MsmsPipelineAnalysis.MsmsRunSummary.S
 import net.systemsbiology.regis_web.pepxml.MsmsPipelineAnalysis.MsmsRunSummary.SpectrumQuery;
 import net.systemsbiology.regis_web.pepxml.MsmsPipelineAnalysis.MsmsRunSummary.SpectrumQuery.SearchResult.SearchHit;
 import net.systemsbiology.regis_web.pepxml.MsmsPipelineAnalysis.MsmsRunSummary.SpectrumQuery.SearchResult.SearchHit.AnalysisResult;
+import org.yeastrc.limelight.xml.msfragger_tpp.constants.MassConstants;
 import org.yeastrc.limelight.xml.msfragger_tpp.objects.TPPPSM;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static java.lang.Math.toIntExact;
@@ -212,7 +213,7 @@ public class TPPParsingUtils {
 		
 		psm.setHyperScore( getScoreForType( searchHit, "hyperscore" ) );
 		psm.setNextScore( getScoreForType( searchHit, "nextscore" ) );
-		psm.seteValue( getScoreForType( searchHit, "e_value" ) );
+		psm.seteValue( getScoreForType( searchHit, "expect" ) );
 
 		psm.setMassDiff( getMassDiffForSearchHit( searchHit ) );
 
@@ -333,14 +334,30 @@ public class TPPParsingUtils {
 	public static Map<Integer, BigDecimal> getModificationsForSearchHit( SearchHit searchHit ) throws Throwable {
 		
 		Map<Integer, BigDecimal> modMap = new HashMap<>();
-		
+
+		String peptide = searchHit.getPeptide();
+		if( peptide == null || peptide.length() < 1 ) {
+			throw new Exception( "searchHit had no peptide: " + searchHit );
+		}
+
 		ModInfoDataType mofo = searchHit.getModificationInfo();
 		if( mofo != null ) {
 			for( ModAminoacidMass mod : mofo.getModAminoacidMass() ) {
-				
-				if( mod.getVariable() != null ) {
-					modMap.put( mod.getPosition().intValueExact(), BigDecimal.valueOf( mod.getVariable() ) );
+
+				// todo: check if this is a static mod and don't include it if so
+
+				int position = mod.getPosition().intValueExact();
+				String aminoAcid = String.valueOf( peptide.charAt( position - 1 ) );
+
+				if( !MassConstants.AMINO_ACID_MASSES.containsKey( aminoAcid ) ) {
+					throw new Exception( "Could not find mass for amino acid: " + aminoAcid );
 				}
+
+				BigDecimal modMass = BigDecimal.valueOf( mod.getMass() ).subtract( MassConstants.AMINO_ACID_MASSES.get( aminoAcid ) );
+
+				modMass = modMass.setScale( 4, RoundingMode.HALF_UP );	// round the mod mass to 4 decimal places
+
+				modMap.put( position, modMass );
 			}
 		}
 		
@@ -360,30 +377,6 @@ public class TPPParsingUtils {
 
 	}
 
-	/**
-	 * Get the mass diff reported for the search hit
-	 *
-	 * @param searchHit
-	 * @return
-	 * @throws Throwable
-	 */
-	public static String getPTMProphetPeptideStringForSearchHit( SearchHit searchHit ) throws Throwable {
-
-		List<AnalysisResult> analysisResults = searchHit.getAnalysisResult();
-		if( analysisResults != null ) {
-			for( AnalysisResult analysisResult : analysisResults ) {
-
-				if( analysisResult.getAnalysis().equals( "ptmprophet" ) ) {
-
-
-				}
-			}
-		}
-
-
-		return null;
-
-	}
 	
 	
 }

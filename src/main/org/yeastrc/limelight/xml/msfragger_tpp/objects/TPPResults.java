@@ -5,21 +5,21 @@ import java.util.Map;
 public class TPPResults {
 
 	private boolean hasIProphetResults;
-	private String magnumVersion;
+	private String msFraggerVersion;
 	private String tppVersion;
 	private Map<TPPReportedPeptide, Map<Integer, TPPPSM>> peptidePSMMap;
 	
 	/**
-	 * @return the magnumVersion
+	 * @return the msFraggerVersion
 	 */
-	public String getMagnumVersion() {
-		return magnumVersion;
+	public String getMsFraggerVersion() {
+		return msFraggerVersion;
 	}
 	/**
-	 * @param magnumVersion the magnumVersion to set
+	 * @param msFraggerVersion the msFraggerVersion to set
 	 */
-	public void setMagnumVersion(String magnumVersion) {
-		this.magnumVersion = magnumVersion;
+	public void setMsFraggerVersion(String msFraggerVersion) {
+		this.msFraggerVersion = msFraggerVersion;
 	}
 	/**
 	 * @return the peptidePSMMap

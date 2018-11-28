@@ -58,7 +58,7 @@ public class TPPResultsParser {
 		results.setPeptidePSMMap( resultMap );
 		
 		results.setTppVersion( TPPParsingUtils.getTPPVersionFromXML( msAnalysis ) );
-		results.setMagnumVersion( TPPParsingUtils.getMSFraggerVersionFromXML( msAnalysis ) );
+		results.setMsFraggerVersion( TPPParsingUtils.getMSFraggerVersionFromXML( msAnalysis ) );
 		
 		results.setHasIProphetResults( TPPParsingUtils.getHasIProphetData( msAnalysis ) );
 		

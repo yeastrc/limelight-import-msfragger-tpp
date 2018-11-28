@@ -48,7 +48,7 @@ public class MainProgram {
 
 		CmdLineParser cmdLineParser = new CmdLineParser();
 
-		CmdLineParser.Option magnumConfOpt = cmdLineParser.addStringOption( 'm', "magnum_conf" );
+		CmdLineParser.Option msFraggerConfOpt = cmdLineParser.addStringOption( 'm', "msfragger_conf" );
 		CmdLineParser.Option outfileOpt = cmdLineParser.addStringOption( 'o', "out" );	
 		CmdLineParser.Option pepXMLOpt = cmdLineParser.addStringOption( 'p', "pepxml" );	
 		CmdLineParser.Option fastaFileOpt = cmdLineParser.addStringOption( 'f', "fasta" );
@@ -64,14 +64,14 @@ public class MainProgram {
 			System.exit( 1 );
 		}
 
-		String magnumConfFilePath = (String)cmdLineParser.getOptionValue( magnumConfOpt );
+		String msFraggerConfFilePath = (String)cmdLineParser.getOptionValue( msFraggerConfOpt );
 		String outFilePath = (String)cmdLineParser.getOptionValue( outfileOpt );
 		String pepXMLFilePath = (String)cmdLineParser.getOptionValue( pepXMLOpt );
 		String fastaFilePath = (String)cmdLineParser.getOptionValue( fastaFileOpt );
 
-		File magnumConfFile = new File( magnumConfFilePath );
-		if( !magnumConfFile.exists() ) {
-			System.err.println( "Could not find magnum conf file: " + magnumConfFilePath );
+		File msFraggerConfFile = new File( msFraggerConfFilePath );
+		if( !msFraggerConfFile.exists() ) {
+			System.err.println( "Could not find msfragger conf file: " + msFraggerConfFilePath );
 			System.exit( 1 );
 		}
 
@@ -92,11 +92,11 @@ public class MainProgram {
 		ConversionParameters cp = new ConversionParameters();
 		cp.setConversionProgramInfo( cpi );
 		cp.setFastaFile( fastaFile );
-		cp.setMagnumConfFile( magnumConfFile );
+		cp.setMsFraggerConfFile( msFraggerConfFile );
 		cp.setPepXMLFile( pepXMLFile );
 		cp.setLimelightXMLOutputFile( new File( outFilePath ) );
 
-		ConverterRunner.createInstance().convertMagnumTPPToLimelightXML( cp );
+		ConverterRunner.createInstance().convertMSFraggerTPPToLimelightXML( cp );
 		System.exit( 0 );
 	}
 

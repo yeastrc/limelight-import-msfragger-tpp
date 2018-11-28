@@ -33,10 +33,10 @@ public class ConverterRunner {
 	public static ConverterRunner createInstance() { return new ConverterRunner(); }
 	
 	
-	public void convertMagnumTPPToLimelightXML(ConversionParameters conversionParameters ) throws Throwable {
+	public void convertMSFraggerTPPToLimelightXML(ConversionParameters conversionParameters ) throws Throwable {
 	
 		System.err.print( "Reading conf file into memory..." );
-		MSFraggerParameters cometParams = MSFraggerParamsReader.getMSFraggerParameters( conversionParameters.getMagnumConfFile() );
+		MSFraggerParameters cometParams = MSFraggerParamsReader.getMSFraggerParameters( conversionParameters.getMsFraggerConfFile() );
 		System.err.println( " Done." );
 		
 		System.err.print( "Reading pepXML data into memory..." );

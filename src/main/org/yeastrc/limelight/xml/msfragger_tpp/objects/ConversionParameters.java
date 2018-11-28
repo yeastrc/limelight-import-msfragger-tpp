@@ -35,16 +35,16 @@ public class ConversionParameters {
 		this.fastaFile = fastaFile;
 	}
 	/**
-	 * @return the magnumConfFile
+	 * @return the msFraggerConfFile
 	 */
-	public File getMagnumConfFile() {
-		return magnumConfFile;
+	public File getMsFraggerConfFile() {
+		return msFraggerConfFile;
 	}
 	/**
-	 * @param magnumConfFile the magnumConfFile to set
+	 * @param msFraggerConfFile the msFraggerConfFile to set
 	 */
-	public void setMagnumConfFile(File magnumConfFile) {
-		this.magnumConfFile = magnumConfFile;
+	public void setMsFraggerConfFile(File msFraggerConfFile) {
+		this.msFraggerConfFile = msFraggerConfFile;
 	}
 	/**
 	 * @return the limelightXMLOutputFile
@@ -84,7 +84,7 @@ public class ConversionParameters {
 	}
 	
 	private File fastaFile;
-	private File magnumConfFile;
+	private File msFraggerConfFile;
 	private File limelightXMLOutputFile;
 	private File pepXMLFile;
 	private ConversionProgramInfo conversionProgramInfo;
