@@ -94,22 +94,22 @@ public class XMLBuilder {
 
 		}
 
-//		{
-//			SearchProgram searchProgram = new SearchProgram();
-//			searchPrograms.getSearchProgram().add( searchProgram );
-//
-//			searchProgram.setName( Constants.PROGRAM_NAME_PTMPROPHET );
-//			searchProgram.setDisplayName( Constants.PROGRAM_NAME_PTMPROPHET );
-//			searchProgram.setVersion( tppResults.getTppVersion() );
-//
-//
-//			//
-//			// Define the annotation types present in peptideprophet data
-//			//
-//			PsmAnnotationTypes psmAnnotationTypes = new PsmAnnotationTypes();
-//			searchProgram.setPsmAnnotationTypes( psmAnnotationTypes );
-//
-//		}
+		{
+			SearchProgram searchProgram = new SearchProgram();
+			searchPrograms.getSearchProgram().add( searchProgram );
+
+			searchProgram.setName( Constants.PROGRAM_NAME_PTMPROPHET );
+			searchProgram.setDisplayName( Constants.PROGRAM_NAME_PTMPROPHET );
+			searchProgram.setVersion( tppResults.getTppVersion() );
+
+
+			//
+			// Define the annotation types present in peptideprophet data
+			//
+			PsmAnnotationTypes psmAnnotationTypes = new PsmAnnotationTypes();
+			searchProgram.setPsmAnnotationTypes( psmAnnotationTypes );
+
+		}
 
 		{
 			SearchProgram searchProgram = new SearchProgram();

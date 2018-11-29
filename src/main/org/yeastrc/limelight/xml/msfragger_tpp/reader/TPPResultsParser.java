@@ -23,6 +23,7 @@ import net.systemsbiology.regis_web.pepxml.MsmsPipelineAnalysis.MsmsRunSummary;
 import net.systemsbiology.regis_web.pepxml.MsmsPipelineAnalysis.MsmsRunSummary.SpectrumQuery;
 import net.systemsbiology.regis_web.pepxml.MsmsPipelineAnalysis.MsmsRunSummary.SpectrumQuery.SearchResult;
 import net.systemsbiology.regis_web.pepxml.MsmsPipelineAnalysis.MsmsRunSummary.SpectrumQuery.SearchResult.SearchHit;
+import org.yeastrc.limelight.xml.msfragger_tpp.objects.MSFraggerParameters;
 import org.yeastrc.limelight.xml.msfragger_tpp.objects.TPPPSM;
 import org.yeastrc.limelight.xml.msfragger_tpp.objects.TPPReportedPeptide;
 import org.yeastrc.limelight.xml.msfragger_tpp.objects.TPPResults;
@@ -41,7 +42,7 @@ import java.util.Map;
  */
 public class TPPResultsParser {
 
-	public static TPPResults getTPPResults( File pepXMLFile ) throws Throwable {
+	public static TPPResults getTPPResults( File pepXMLFile, MSFraggerParameters params ) throws Throwable {
 
 		Map<TPPReportedPeptide,Map<Integer,TPPPSM>> resultMap = new HashMap<>();
 				
@@ -83,7 +84,7 @@ public class TPPResultsParser {
 						
 						try {
 							
-							psm = TPPParsingUtils.getPsmFromSearchHit( searchHit, charge, scanNumber, neutralMass, retentionTime );
+							psm = TPPParsingUtils.getPsmFromSearchHit( searchHit, charge, scanNumber, neutralMass, retentionTime, params );
 							
 						} catch( Throwable t) {
 							
