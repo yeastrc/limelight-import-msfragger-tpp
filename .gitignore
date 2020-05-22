@@ -11,15 +11,20 @@
 .mtj.tmp/
 
 # Package Files #
-*.war
-*.nar
 *.ear
 *.tar.gz
 *.rar
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/bin/
 
+.classpath
+.project
+/deploy/
+/resources/
 /classes/
 /.idea/
-/deploy/
+/limelight-import-crux-tide-percolator.iml
+/.gradle/
+/build/
