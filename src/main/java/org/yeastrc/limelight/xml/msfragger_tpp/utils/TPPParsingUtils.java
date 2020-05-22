@@ -101,6 +101,28 @@ public class TPPParsingUtils {
 		
 		return false;
 	}
+
+	/**
+	 * Return true if the results can be expected to have PTMProphet data, false otherwise.
+	 *
+	 * @param msAnalysis
+	 * @return
+	 */
+	public static boolean getHasPTMProphetData( MsmsPipelineAnalysis msAnalysis ) {
+
+		for( AnalysisSummary analysisSummary : msAnalysis.getAnalysisSummary() ) {
+
+			for( Object o : analysisSummary.getAny() ) {
+
+				if( o instanceof PtmprophetSummary) {
+					return true;
+				}
+
+			}
+		}
+
+		return false;
+	}
 	
 
 	/**

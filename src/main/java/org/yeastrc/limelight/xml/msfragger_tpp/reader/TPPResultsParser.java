@@ -62,7 +62,7 @@ public class TPPResultsParser {
 		results.setMsFraggerVersion( TPPParsingUtils.getMSFraggerVersionFromXML( msAnalysis ) );
 		
 		results.setHasIProphetResults( TPPParsingUtils.getHasIProphetData( msAnalysis ) );
-		
+		results.setHasPTMProphetResults( TPPParsingUtils.getHasPTMProphetData( msAnalysis ) );
 		
 		for( MsmsRunSummary runSummary : msAnalysis.getMsmsRunSummary() ) {
 			for( SpectrumQuery spectrumQuery : runSummary.getSpectrumQuery() ) {

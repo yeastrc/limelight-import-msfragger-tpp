@@ -5,6 +5,7 @@ import java.util.Map;
 public class TPPResults {
 
 	private boolean hasIProphetResults;
+	private boolean hasPTMProphetResults;
 	private String msFraggerVersion;
 	private String tppVersion;
 	private Map<TPPReportedPeptide, Map<Integer, TPPPSM>> peptidePSMMap;
@@ -46,6 +47,11 @@ public class TPPResults {
 		this.hasIProphetResults = hasIProphetResults;
 	}
 
+	public boolean isHasPTMProphetResults() {
+		return hasPTMProphetResults;
+	}
 
-	
+	public void setHasPTMProphetResults(boolean hasPTMProphetResults) {
+		this.hasPTMProphetResults = hasPTMProphetResults;
+	}
 }
