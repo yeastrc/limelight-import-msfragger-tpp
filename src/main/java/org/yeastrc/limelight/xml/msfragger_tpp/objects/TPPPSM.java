@@ -9,6 +9,7 @@ public class TPPPSM {
 	private BigDecimal nextScore;
 	private BigDecimal eValue;
 	private BigDecimal massDiff;
+	private BigDecimal openModMass;
 	
 	private BigDecimal peptideProphetProbability;
 	private BigDecimal interProphetProbability;
@@ -164,5 +165,13 @@ public class TPPPSM {
 
 	public void setInterProphetFDR(BigDecimal interProphetFDR) {
 		this.interProphetFDR = interProphetFDR;
+	}
+
+	public BigDecimal getOpenModMass() {
+		return openModMass;
+	}
+
+	public void setOpenModMass(BigDecimal openModMass) {
+		this.openModMass = openModMass;
 	}
 }
