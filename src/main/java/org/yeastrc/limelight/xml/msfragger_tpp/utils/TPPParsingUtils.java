@@ -10,6 +10,7 @@ import net.systemsbiology.regis_web.pepxml.MsmsPipelineAnalysis.MsmsRunSummary.S
 import net.systemsbiology.regis_web.pepxml.MsmsPipelineAnalysis.MsmsRunSummary.SpectrumQuery.SearchResult.SearchHit.AnalysisResult;
 import org.yeastrc.limelight.xml.msfragger_tpp.constants.MassConstants;
 import org.yeastrc.limelight.xml.msfragger_tpp.objects.MSFraggerParameters;
+import org.yeastrc.limelight.xml.msfragger_tpp.objects.OpenModification;
 import org.yeastrc.limelight.xml.msfragger_tpp.objects.TPPPSM;
 
 import javax.xml.bind.JAXBContext;
@@ -17,8 +18,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static java.lang.Math.toIntExact;
 
@@ -224,7 +224,9 @@ public class TPPParsingUtils {
 			int scanNumber,
 			BigDecimal obsMass,
 			BigDecimal retentionTime,
-			MSFraggerParameters params ) throws Throwable {
+			MSFraggerParameters params,
+			boolean isOpenMod,
+			boolean isPTMProphet ) throws Throwable {
 				
 		TPPPSM psm = new TPPPSM();
 		
@@ -253,10 +255,18 @@ public class TPPParsingUtils {
 
 		
 		try {
-			psm.setModifications( getModificationsForSearchHit( searchHit, params ) );
+			psm.setModifications( getModificationsForSearchHit( searchHit, params, isOpenMod, isPTMProphet ) );
 		} catch( Throwable t ) {
 			
 			System.err.println( "Error getting mods for PSM. Error was: " + t.getMessage() );
+			throw t;
+		}
+
+		try {
+			psm.setOpenModification( getOpenModificationForSearchHit( searchHit, isOpenMod, isPTMProphet ) );
+		} catch( Throwable t ) {
+
+			System.err.println( "Error getting open mod information for PSM. Error was: " + t.getMessage() );
 			throw t;
 		}
 		
@@ -355,7 +365,7 @@ public class TPPParsingUtils {
 	 * @return
 	 * @throws Throwable
 	 */
-	public static Map<Integer, BigDecimal> getModificationsForSearchHit( SearchHit searchHit, MSFraggerParameters params ) throws Throwable {
+	public static Map<Integer, BigDecimal> getModificationsForSearchHit( SearchHit searchHit, MSFraggerParameters params, boolean isOpenMod, boolean isPTMProphet ) throws Throwable {
 		
 		Map<Integer, BigDecimal> modMap = new HashMap<>();
 
@@ -368,9 +378,8 @@ public class TPPParsingUtils {
 		if( mofo != null ) {
 			for( ModAminoacidMass mod : mofo.getModAminoacidMass() ) {
 
-				// todo: check if this is a static mod and don't include it if so
-
 				int position = mod.getPosition().intValueExact();
+
 				String aminoAcid = String.valueOf( peptide.charAt( position - 1 ) );
 
 				if( !MassConstants.AMINO_ACID_MASSES.containsKey( aminoAcid ) ) {
@@ -382,12 +391,108 @@ public class TPPParsingUtils {
 				modMass = modMass.setScale( 4, RoundingMode.HALF_UP );	// round the mod mass to 4 decimal places
 
 				if( !isModStaticMod( aminoAcid, modMass, params ) ) {
-					modMap.put(position, modMass);
+					if( !isOpenMod(searchHit, modMass, position, isOpenMod, isPTMProphet)) {
+						modMap.put(position, modMass);
+					}
 				}
 			}
 		}
 		
 		return modMap;
+	}
+
+	private static OpenModification getOpenModificationForSearchHit(SearchHit searchHit, boolean isOpenMod, boolean isPTMProphet) throws Throwable {
+
+		if(!isOpenMod) { return null; }
+
+		BigDecimal mass = getMassDiffForSearchHit( searchHit );
+		Collection<Integer> positions = null;
+
+		if(isPTMProphet) {
+			positions = getPTMProphetPositionsForSearchHIt(searchHit);
+		}
+
+		return new OpenModification(mass, positions);
+	}
+
+	/**
+	 * Get all positions associated with the best probability calculated by PTM Prophet
+	 *
+	 * @param searchHit
+	 * @return
+	 * @throws Throwable
+	 */
+	private static Collection<Integer> getPTMProphetPositionsForSearchHIt(SearchHit searchHit) throws Throwable {
+
+		Collection<Integer> positions = null;
+
+		for(AnalysisResult analysisResult : searchHit.getAnalysisResult()) {
+
+			if( analysisResult.getAnalysis().equals( "ptmprophet")) {
+
+				for( Object o : analysisResult.getAny() ) {
+
+					try {
+
+						PtmprophetResult ptmprophetResult = (PtmprophetResult)o;
+
+						// only consider mass diff-derived PTM localizations
+						if(!ptmprophetResult.getPtm().equals("MASSDIFF")) {
+							continue;
+						}
+
+						BigDecimal bestScore = BigDecimal.ZERO;
+
+						for(PtmprophetResult.ModAminoacidProbability modAminoacidProbability : ptmprophetResult.getModAminoacidProbability()) {
+
+							if(modAminoacidProbability.getProbability().compareTo(bestScore) > 0) {
+								bestScore = modAminoacidProbability.getProbability();
+								positions = new ArrayList<>();
+								positions.add(modAminoacidProbability.getPosition().intValueExact());
+							} else if(modAminoacidProbability.getProbability().equals(bestScore)) {
+								positions.add(modAminoacidProbability.getPosition().intValueExact());
+							}
+
+						}
+
+					} catch( Throwable t ) {
+
+					}
+				}
+			}
+		}
+
+		return positions;
+	}
+
+	/**
+	 * Make a best guess about whether the reported mod has been made by PTMProphet using the mass diff.
+	 * Note to whomever is reading this: it'd be nice if PTMProphet indicated this, itself.
+	 *
+	 * Strategy: if the modded position is in the list of positions with the highest probability reported by PTMProphet,
+	 * AND if the mod mass is equal to the mass diff of the PSM (to 4 decimal places), assume this mod was created by
+	 * PTMProphet and is an open mod
+	 *
+	 * @param searchHit
+	 * @param modMass
+	 * @param position
+	 * @return
+	 */
+	private static boolean isOpenMod(SearchHit searchHit, BigDecimal modMass, int position, boolean isOpenMod, boolean isPTMProphet) throws Throwable {
+		if( !isOpenMod ) { return false; }
+		if( !isPTMProphet ) { return false; }
+
+		Collection<Integer> ptmProphetPositions = getPTMProphetPositionsForSearchHIt(searchHit);
+		if(ptmProphetPositions != null) {
+			if(ptmProphetPositions.contains(position)) {
+				BigDecimal massDiff = getMassDiffForSearchHit(searchHit).setScale(4, RoundingMode.HALF_UP);
+				modMass = modMass.setScale(4, RoundingMode.HALF_UP);
+
+				return massDiff.equals(modMass);
+			}
+		}
+
+		return false;
 	}
 
 	private static boolean isModStaticMod(String aminoAcid, BigDecimal modMass, MSFraggerParameters params ) {

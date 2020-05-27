@@ -356,8 +356,16 @@ public class XMLBuilder {
 				// add in the open mod mass if this is an open mod search
 				if(conversionParameters.isOpenMod()) {
 					PsmOpenModification xmlPsmOpenMod = new PsmOpenModification();
-					xmlPsmOpenMod.setMass(psm.getMassDiff());
+					xmlPsmOpenMod.setMass(psm.getOpenModification().getMass());
 					xmlPsm.setPsmOpenModification(xmlPsmOpenMod);
+
+					if(psm.getOpenModification().getPositions() != null && psm.getOpenModification().getPositions().size() > 0) {
+						for(int position : psm.getOpenModification().getPositions()) {
+							PsmOpenModificationPosition xmlPsmOpenModPosition = new PsmOpenModificationPosition();
+							xmlPsmOpenModPosition.setPosition(BigInteger.valueOf(position));
+							xmlPsmOpenMod.getPsmOpenModificationPosition().add(xmlPsmOpenModPosition);
+						}
+					}
 				}
 				
 				

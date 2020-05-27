@@ -42,7 +42,7 @@ import java.util.Map;
  */
 public class TPPResultsParser {
 
-	public static TPPResults getTPPResults( File pepXMLFile, MSFraggerParameters params ) throws Throwable {
+	public static TPPResults getTPPResults( File pepXMLFile, MSFraggerParameters params, boolean isOpenMod ) throws Throwable {
 
 		Map<TPPReportedPeptide,Map<Integer,TPPPSM>> resultMap = new HashMap<>();
 				
@@ -84,7 +84,7 @@ public class TPPResultsParser {
 						
 						try {
 							
-							psm = TPPParsingUtils.getPsmFromSearchHit( searchHit, charge, scanNumber, neutralMass, retentionTime, params );
+							psm = TPPParsingUtils.getPsmFromSearchHit( searchHit, charge, scanNumber, neutralMass, retentionTime, params, isOpenMod, results.isHasPTMProphetResults() );
 							
 						} catch( Throwable t) {
 							
