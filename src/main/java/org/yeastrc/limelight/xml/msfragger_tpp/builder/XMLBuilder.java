@@ -352,6 +352,13 @@ public class XMLBuilder {
 						xmlPSMModification.setPosition( new BigInteger( String.valueOf( position ) ) );
 					}
 				}
+
+				// add in the open mod mass if this is an open mod search
+				if(conversionParameters.isOpenMod()) {
+					PsmOpenModification xmlPsmOpenMod = new PsmOpenModification();
+					xmlPsmOpenMod.setMass(psm.getMassDiff());
+					xmlPsm.setPsmOpenModification(xmlPsmOpenMod);
+				}
 				
 				
 			}// end iterating over psms for a reported peptide
