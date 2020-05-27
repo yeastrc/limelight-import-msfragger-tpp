@@ -50,7 +50,7 @@ public class MainProgram implements Runnable {
 	@CommandLine.Option(names = { "-m", "--msfragger-conf" }, required = true, description = "Path to MSFragger .conf file")
 	private File msFraggerConfFile;
 
-	@CommandLine.Option(names = { "-f", "--fasta-file" }, required = false, description = "(Optional) Full path to FASTA file used in the experiment. E.g., /data/yeast.fa If not supplied, comet.params will be used to find FASTA file.")
+	@CommandLine.Option(names = { "-f", "--fasta-file" }, required = true, description = "Full path to FASTA file used in the experiment. E.g., /data/yeast.fa")
 	private File fastaFile;
 
 	@CommandLine.Option(names = { "-p", "--pepxml-file" }, required = true, description = "Path to pepXML file")
