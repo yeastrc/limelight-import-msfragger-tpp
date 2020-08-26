@@ -135,11 +135,11 @@ public class TPPParsingUtils {
 	public static boolean searchHitIsDecoy( SearchHit searchHit, String decoyPrefix ) {
 		
 		String protein = searchHit.getProtein();
-		if( protein.startsWith( "DECOY_" ) ) {
+		if( protein.startsWith( decoyPrefix ) ) {
 			
 			if( searchHit.getAlternativeProtein() != null ) {
 				for( AltProteinDataType ap : searchHit.getAlternativeProtein() ) {
-					if( !ap.getProtein().startsWith( "DECOY_" ) ) {
+					if( !ap.getProtein().startsWith( decoyPrefix ) ) {
 						return false;
 					}
 				}
