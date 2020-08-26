@@ -132,7 +132,7 @@ public class TPPParsingUtils {
 	 * @param searchHit
 	 * @return
 	 */
-	public static boolean searchHitIsDecoy( SearchHit searchHit ) {
+	public static boolean searchHitIsDecoy( SearchHit searchHit, String decoyPrefix ) {
 		
 		String protein = searchHit.getProtein();
 		if( protein.startsWith( "DECOY_" ) ) {

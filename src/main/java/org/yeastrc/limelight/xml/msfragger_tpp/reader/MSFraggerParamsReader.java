@@ -50,12 +50,12 @@ public class MSFraggerParamsReader {
 			for ( String line = br.readLine(); line != null; line = br.readLine() ) {
 
 				// skip immediately if it's not a line we want
-				if( !line.startsWith( "decoy_filter" ) )
+				if( !line.startsWith( "decoy_prefix" ) )
 					continue;
 
 				String[] fields = line.split( "\\s+" );
 
-				if( !fields[ 0 ].equals( "decoy_filter" ) || !fields[ 1 ].equals( "=" ) ) {
+				if( !fields[ 0 ].equals( "decoy_prefix" ) || !fields[ 1 ].equals( "=" ) ) {
 					throw new Exception( "Error processing decoy_filter from params file. Got this line: " + line );
 				}
 
@@ -65,7 +65,7 @@ public class MSFraggerParamsReader {
 
 		}
 
-		return null;	// could not find a decoy_filter--just assume we don't have one instead of throwing an exception
+		throw new Exception("Could not find a decoy prefix in params file...");
 
 	}
 

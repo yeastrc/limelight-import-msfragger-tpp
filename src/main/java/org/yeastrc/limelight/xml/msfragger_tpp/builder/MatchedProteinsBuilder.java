@@ -38,7 +38,7 @@ public class MatchedProteinsBuilder {
 	 * @param reportedPeptides
 	 * @throws Exception
 	 */
-	public void buildMatchedProteins( LimelightInput limelightInputRoot, File fastaFile, Collection<TPPReportedPeptide> reportedPeptides ) throws Exception {
+	public void buildMatchedProteins( LimelightInput limelightInputRoot, File fastaFile, Collection<TPPReportedPeptide> reportedPeptides, String decoyPrefix ) throws Exception {
 
 		System.err.print( " Matching peptides to proteins..." );
 
@@ -48,9 +48,34 @@ public class MatchedProteinsBuilder {
 		// find the proteins matched by any of these peptides
 		Map<String, Collection<FastaProteinAnnotation>> proteins = getProteins( nakedPeptideObjects, fastaFile );
 
+		// remove decoys
+		proteins = removeDecoysFromProteins(proteins, decoyPrefix);
+
 		// create the XML and add to root element
 		buildAndAddMatchedProteinsToXML( limelightInputRoot, proteins );
 
+	}
+
+
+	private Map<String, Collection<FastaProteinAnnotation>> removeDecoysFromProteins(Map<String, Collection<FastaProteinAnnotation>> proteins, String decoyPrefix) {
+
+		Map<String, Collection<FastaProteinAnnotation>> proteinAnnotations = new HashMap<>();
+
+		for(String sequence : proteins.keySet()) {
+			Collection<FastaProteinAnnotation> annos = new HashSet<>();
+
+			for(FastaProteinAnnotation anno : proteins.get(sequence)) {
+				if(!anno.getName().startsWith(decoyPrefix)) {
+					annos.add(anno);
+				}
+			}
+
+			if(annos.size() > 0) {
+				proteinAnnotations.put(sequence, annos);
+			}
+		}
+
+		return proteinAnnotations;
 	}
 
 
@@ -208,7 +233,6 @@ public class MatchedProteinsBuilder {
 
 		return proteinAnnotations;
 	}
-
 
 	private boolean nakedPeptideObjectsContainsUnmatchedPeptides( Collection<PeptideObject> nakedPeptideObjects ) {
 

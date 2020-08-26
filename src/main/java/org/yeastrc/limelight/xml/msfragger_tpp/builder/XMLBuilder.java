@@ -23,7 +23,7 @@ public class XMLBuilder {
 
 	public void buildAndSaveXML( ConversionParameters conversionParameters,
 			                     TPPResults tppResults,
-			                     MSFraggerParameters magnumParameters,
+			                     MSFraggerParameters fraggerParameters,
 			                     TPPErrorAnalysis ppErrorAnalysis,
 			                     TPPErrorAnalysis ipErrorAnalysis )
     throws Exception {
@@ -166,16 +166,16 @@ public class XMLBuilder {
 		//
 		// Define the static mods
 		//
-		if( magnumParameters.getStaticMods() != null && magnumParameters.getStaticMods().keySet().size() > 0 ) {
+		if( fraggerParameters.getStaticMods() != null && fraggerParameters.getStaticMods().keySet().size() > 0 ) {
 			StaticModifications smods = new StaticModifications();
 			limelightInputRoot.setStaticModifications( smods );
 			
 			
-			for( char residue : magnumParameters.getStaticMods().keySet() ) {
+			for( char residue : fraggerParameters.getStaticMods().keySet() ) {
 				
 				StaticModification xmlSmod = new StaticModification();
 				xmlSmod.setAminoAcid( String.valueOf( residue ) );
-				xmlSmod.setMassChange( BigDecimal.valueOf( magnumParameters.getStaticMods().get( residue ) ) );
+				xmlSmod.setMassChange( BigDecimal.valueOf( fraggerParameters.getStaticMods().get( residue ) ) );
 				
 				smods.getStaticModification().add( xmlSmod );
 			}
@@ -380,7 +380,8 @@ public class XMLBuilder {
 		MatchedProteinsBuilder.getInstance().buildMatchedProteins(
 				                                                   limelightInputRoot,
 				                                                   conversionParameters.getFastaFile(),
-				                                                   tppResults.getPeptidePSMMap().keySet()
+				                                                   tppResults.getPeptidePSMMap().keySet(),
+																	fraggerParameters.getDecoyPrefix()
 				                                                  );
 		
 		

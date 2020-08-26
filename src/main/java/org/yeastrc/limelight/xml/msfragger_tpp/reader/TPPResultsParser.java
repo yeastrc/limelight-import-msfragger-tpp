@@ -76,7 +76,7 @@ public class TPPResultsParser {
 					for( SearchHit searchHit : searchResult.getSearchHit() ) {
 						
 						// do not include decoy hits
-						if( TPPParsingUtils.searchHitIsDecoy( searchHit ) ) {
+						if( TPPParsingUtils.searchHitIsDecoy( searchHit, params.getDecoyPrefix() ) ) {
 							continue;
 						}
 						
