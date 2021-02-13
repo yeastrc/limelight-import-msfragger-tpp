@@ -10,6 +10,7 @@ import org.yeastrc.limelight.xml.msfragger_tpp.annotation.PSMDefaultVisibleAnnot
 import org.yeastrc.limelight.xml.msfragger_tpp.constants.Constants;
 import org.yeastrc.limelight.xml.msfragger_tpp.objects.*;
 import org.yeastrc.limelight.xml.msfragger_tpp.reader.TPPErrorAnalysis;
+import org.yeastrc.limelight.xml.msfragger_tpp.utils.TPPParsingUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -235,6 +236,8 @@ public class XMLBuilder {
 
 				xmlPsm.setScanNumber( new BigInteger( String.valueOf( scanNumber ) ) );
 				xmlPsm.setPrecursorCharge( new BigInteger( String.valueOf( psm.getCharge() ) ) );
+				xmlPsm.setPrecursorMZ(TPPParsingUtils.getObservedMoverZForPsm(psm));
+				xmlPsm.setPrecursorRetentionTime(psm.getRetentionTime());
 
 				// add in the filterable PSM annotations (e.g., score)
 				FilterablePsmAnnotations xmlFilterablePsmAnnotations = new FilterablePsmAnnotations();
