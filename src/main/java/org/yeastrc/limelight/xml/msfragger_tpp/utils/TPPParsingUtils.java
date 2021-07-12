@@ -103,6 +103,23 @@ public class TPPParsingUtils {
 	}
 
 	/**
+	 * Return true if the results can be expected to have peptideprophet data, false otherwise.
+	 *
+	 * @param msAnalysis
+	 * @return
+	 */
+	public static boolean getHasPeptideProphetData( MsmsPipelineAnalysis msAnalysis ) {
+
+		for( AnalysisSummary analysisSummary : msAnalysis.getAnalysisSummary() ) {
+			if(analysisSummary.getAnalysis().equals("peptideprophet")) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Return true if the results can be expected to have PTMProphet data, false otherwise.
 	 *
 	 * @param msAnalysis

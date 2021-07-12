@@ -53,6 +53,14 @@ public class TPPResultsParser {
 			System.err.println( "Got an error parsing the pep XML file. Error: " + t.getMessage() );
 			throw t;
 		}
+
+		if(!TPPParsingUtils.getHasPeptideProphetData(msAnalysis)) {
+			String message = "PeptideProphet was not run. This converter only works for MSFragger + TPP data.\n";
+			message += "Please see our other MSFragger converters to convert native MSFragger output:\n";
+			message += "https://github.com/yeastrc?q=limelight-import-msfragger&type=&language=&sort=";
+
+			throw new Exception(message);
+		}
 		
 		
 		TPPResults results = new TPPResults();
