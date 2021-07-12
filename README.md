@@ -5,6 +5,7 @@ Use this program to convert the results of a MSFragger + TPP analysis to
 limelight XML suitable for import into the limelight web application.
 
 Note:
+- Use of TPP (PeptideProphet) is required
 - Use of InterProphet (iProphet) is optional
 - Use of PTMProphet is optional
 - If you are doing an open mod search, be sure to use --open-mod when running converter
