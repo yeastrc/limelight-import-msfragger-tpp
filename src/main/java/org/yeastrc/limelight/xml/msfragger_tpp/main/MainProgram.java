@@ -47,13 +47,13 @@ import picocli.CommandLine;
  */
 public class MainProgram implements Runnable {
 
-	@CommandLine.Option(names = { "-m", "--msfragger-conf" }, required = true, description = "Path to MSFragger .conf file")
+	@CommandLine.Option(names = { "-p", "--msfragger-params" }, required = true, description = "Path to MSFragger .params file")
 	private File msFraggerConfFile;
 
 	@CommandLine.Option(names = { "-f", "--fasta-file" }, required = true, description = "Full path to FASTA file used in the experiment. E.g., /data/yeast.fa")
 	private File fastaFile;
 
-	@CommandLine.Option(names = { "-p", "--pepxml-file" }, required = true, description = "Path to pepXML file")
+	@CommandLine.Option(names = { "-x", "--pepxml-file" }, required = true, description = "Path to pepXML file")
 	private File pepXMLFile;
 
 	@CommandLine.Option(names = { "-o", "--out-file" }, required = true, description = "Full path to use for the Limelight XML output file. E.g., /data/my_analysis/crux.limelight.xml")
@@ -72,7 +72,7 @@ public class MainProgram implements Runnable {
 		printRuntimeInfo();
 
 		if( !msFraggerConfFile.exists() ) {
-			System.err.println( "Could not find msfragger conf file: " + msFraggerConfFile.getAbsolutePath() );
+			System.err.println( "Could not find msFragger params file: " + msFraggerConfFile.getAbsolutePath() );
 			System.exit( 1 );
 		}
 
@@ -82,7 +82,7 @@ public class MainProgram implements Runnable {
 		}
 
 		if( !fastaFile.exists() ) {
-			System.err.println( "Could not find fasta file: " + fastaFile.getAbsolutePath() );
+			System.err.println( "Could not find Fasta file: " + fastaFile.getAbsolutePath() );
 			System.exit( 1 );
 		}
 

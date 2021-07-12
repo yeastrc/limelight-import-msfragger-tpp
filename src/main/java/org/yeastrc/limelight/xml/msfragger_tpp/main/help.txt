@@ -2,16 +2,15 @@ Description: Convert the results of a MSFragger TPP analysis into limelight XML
              suitable for import into the limelight web application. The mods
              must be localized by PTM Prophet.
 
-Usage: java -jar msFraggerTPP2LimelightXML.jar.jar -m path -p path -f path -o path
+Usage: java -jar msFraggerTPP2LimelightXML.jar.jar -p path -x path -f path -o path
 
-Example: java -jar msFraggerTPP2LimelightXML.jar -m /path/to/msfragger.conf
-                                       -o /path/to/output.limelight.xml
-                                       -p /path/to/pepXML.xml
+Example: java -jar msFraggerTPP2LimelightXML.jar -p /path/to/msfragger.params
+                                       -x /path/to/pepXML.xml
                                        -f /path/to/fasta.fa
+                                       -o /path/to/output.limelight.xml
 
 Options:
-	-m	[Required] Path to MSFragger .conf file
-	-o	[Required] Path to use for the limelight XML output file
+	-p	[Required] Path to MSFragger .params file
+	-x	[Required] Path to pepXML file
 	-f	[Required] Path to FASTA file used in the experiment.
-	-p	[Required] Path to pepXML file
-
+	-o	[Required] Path to use for the limelight XML output file

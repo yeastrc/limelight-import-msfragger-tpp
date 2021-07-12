@@ -19,8 +19,8 @@ Command line documentation
 
 ```
 java -jar msFraggerTPP2LimelightXML.jar [-hvV] [--open-mod] -f=<fastaFile>
-                                        -m=<msFraggerConfFile> -o=<outFile>
-                                        -p=<pepXMLFile>
+                                        -o=<outFile> -p=<msFraggerConfFile>
+                                        -x=<pepXMLFile>
 
 Description:
 
@@ -30,12 +30,12 @@ suitable for import into Limelight.
 More info at: https://github.com/yeastrc/limelight-import-msfragger-tpp
 
 Options:
-  -m, --msfragger-conf=<msFraggerConfFile>
-                             Path to MSFragger .conf file
+  -p, --msfragger-params=<msFraggerConfFile>
+                             Path to MSFragger .params file
   -f, --fasta-file=<fastaFile>
                              Full path to FASTA file used in the experiment. E.g.,
                                /data/yeast.fa
-  -p, --pepxml-file=<pepXMLFile>
+  -x, --pepxml-file=<pepXMLFile>
                              Path to pepXML file
   -o, --out-file=<outFile>   Full path to use for the Limelight XML output file. E.
                                g., /data/my_analysis/crux.limelight.xml
@@ -46,5 +46,4 @@ Options:
                                as an unlocalized modification mass for the peptide.
   -h, --help                 Show this help message and exit.
   -V, --version              Print version information and exit.
-
 ```
