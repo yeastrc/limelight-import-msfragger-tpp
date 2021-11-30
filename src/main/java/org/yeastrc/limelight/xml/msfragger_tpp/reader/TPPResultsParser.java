@@ -71,8 +71,17 @@ public class TPPResultsParser {
 		
 		results.setHasIProphetResults( TPPParsingUtils.getHasIProphetData( msAnalysis ) );
 		results.setHasPTMProphetResults( TPPParsingUtils.getHasPTMProphetData( msAnalysis ) );
-		
+
+		int runCounter = 0;
 		for( MsmsRunSummary runSummary : msAnalysis.getMsmsRunSummary() ) {
+
+			runCounter++;
+			if(runCounter > 1) {
+				results.setHasSubSearches(true);
+			}
+
+			String subSearchName = new File(runSummary.getBaseName()).getName();
+
 			for( SpectrumQuery spectrumQuery : runSummary.getSpectrumQuery() ) {
 				
 				int charge = TPPParsingUtils.getChargeFromSpectrumQuery( spectrumQuery );
@@ -93,7 +102,8 @@ public class TPPResultsParser {
 						try {
 							
 							psm = TPPParsingUtils.getPsmFromSearchHit( searchHit, charge, scanNumber, neutralMass, retentionTime, params, isOpenMod, results.isHasPTMProphetResults() );
-							
+							psm.setSubSearchName(subSearchName);
+
 						} catch( Throwable t) {
 							
 							System.err.println( "Error reading PSM from pepXML. Error: " + t.getMessage() );

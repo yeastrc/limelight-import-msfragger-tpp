@@ -6,6 +6,7 @@ public class TPPResults {
 
 	private boolean hasIProphetResults;
 	private boolean hasPTMProphetResults;
+	private boolean hasSubSearches = false;
 	private String msFraggerVersion;
 	private String tppVersion;
 	private Map<TPPReportedPeptide, Map<Integer, TPPPSM>> peptidePSMMap;
@@ -53,5 +54,13 @@ public class TPPResults {
 
 	public void setHasPTMProphetResults(boolean hasPTMProphetResults) {
 		this.hasPTMProphetResults = hasPTMProphetResults;
+	}
+
+	public boolean isHasSubSearches() {
+		return hasSubSearches;
+	}
+
+	public void setHasSubSearches(boolean hasSubSearches) {
+		this.hasSubSearches = hasSubSearches;
 	}
 }

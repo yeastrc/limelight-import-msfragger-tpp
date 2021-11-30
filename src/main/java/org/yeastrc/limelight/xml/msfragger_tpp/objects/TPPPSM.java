@@ -10,6 +10,7 @@ public class TPPPSM {
 	private BigDecimal eValue;
 	private BigDecimal massDiff;
 	private OpenModification openModification;
+	private String subSearchName;
 
 	public OpenModification getOpenModification() {
 		return openModification;
@@ -175,4 +176,11 @@ public class TPPPSM {
 		this.interProphetFDR = interProphetFDR;
 	}
 
+	public String getSubSearchName() {
+		return subSearchName;
+	}
+
+	public void setSubSearchName(String subSearchName) {
+		this.subSearchName = subSearchName;
+	}
 }

@@ -239,6 +239,10 @@ public class XMLBuilder {
 				xmlPsm.setPrecursorMZ(TPPParsingUtils.getObservedMoverZForPsm(psm));
 				xmlPsm.setPrecursorRetentionTime(psm.getRetentionTime());
 
+				if(tppResults.isHasSubSearches()) {
+					xmlPsm.setSubgroupName(psm.getSubSearchName());
+				}
+
 				// add in the filterable PSM annotations (e.g., score)
 				FilterablePsmAnnotations xmlFilterablePsmAnnotations = new FilterablePsmAnnotations();
 				xmlPsm.setFilterablePsmAnnotations( xmlFilterablePsmAnnotations );
