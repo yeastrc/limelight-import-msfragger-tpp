@@ -19,6 +19,8 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.lang.Math.toIntExact;
 
@@ -222,6 +224,26 @@ public class TPPParsingUtils {
 	 */
 	public static int getChargeFromSpectrumQuery( SpectrumQuery spectrumQuery ) {
 		return spectrumQuery.getAssumedCharge().intValue();
+	}
+
+	/**
+	 * Get the scan filename from the spectrum query JAXB object.
+	 *
+	 * Parsed out of this string: Loo_2021_1108_RJ_48_0f1.00065.00065.3
+	 * Where the correct answer is: Loo_2021_1108_RJ_48_0f1
+	 * @param spectrumQuery
+	 * @return
+	 * @throws Exception if it cannot do this
+	 */
+	public static String getScanFilenameFromSpectrumQuery( SpectrumQuery spectrumQuery ) throws Exception {
+		Pattern p = Pattern.compile("^(.+)\\.\\d+\\.\\d+\\.\\d+$");
+		Matcher m = p.matcher(spectrumQuery.getSpectrum());
+
+		if(m.matches()) {
+			return m.group(1);
+		}
+
+		throw new Exception("Could not find name of spectral file in: " + spectrumQuery.getSpectrum());
 	}
 
 	/**

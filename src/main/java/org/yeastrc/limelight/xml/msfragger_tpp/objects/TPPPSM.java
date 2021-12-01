@@ -11,6 +11,7 @@ public class TPPPSM {
 	private BigDecimal massDiff;
 	private OpenModification openModification;
 	private String subSearchName;
+	private String scanFileName;
 
 	public OpenModification getOpenModification() {
 		return openModification;
@@ -182,5 +183,13 @@ public class TPPPSM {
 
 	public void setSubSearchName(String subSearchName) {
 		this.subSearchName = subSearchName;
+	}
+
+	public String getScanFileName() {
+		return scanFileName;
+	}
+
+	public void setScanFileName(String scanFileName) {
+		this.scanFileName = scanFileName;
 	}
 }

@@ -88,6 +88,7 @@ public class TPPResultsParser {
 				int scanNumber = TPPParsingUtils.getScanNumberFromSpectrumQuery( spectrumQuery );
 				BigDecimal neutralMass = TPPParsingUtils.getNeutralMassFromSpectrumQuery( spectrumQuery );
 				BigDecimal retentionTime = TPPParsingUtils.getRetentionTimeFromSpectrumQuery( spectrumQuery );
+				String scanFilename = TPPParsingUtils.getScanFilenameFromSpectrumQuery(spectrumQuery);
 				
 				for( SearchResult searchResult : spectrumQuery.getSearchResult() ) {
 					for( SearchHit searchHit : searchResult.getSearchHit() ) {
@@ -103,6 +104,7 @@ public class TPPResultsParser {
 							
 							psm = TPPParsingUtils.getPsmFromSearchHit( searchHit, charge, scanNumber, neutralMass, retentionTime, params, isOpenMod, results.isHasPTMProphetResults() );
 							psm.setSubSearchName(subSearchName);
+							psm.setScanFileName(scanFilename);
 
 						} catch( Throwable t) {
 							

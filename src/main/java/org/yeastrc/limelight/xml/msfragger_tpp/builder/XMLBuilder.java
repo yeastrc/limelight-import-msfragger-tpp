@@ -241,6 +241,7 @@ public class XMLBuilder {
 
 				if(tppResults.isHasSubSearches()) {
 					xmlPsm.setSubgroupName(psm.getSubSearchName());
+					xmlPsm.setScanFileName(psm.getScanFileName());
 				}
 
 				// add in the filterable PSM annotations (e.g., score)
