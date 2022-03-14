@@ -294,7 +294,7 @@ public class TPPParsingUtils {
 
 		
 		try {
-			psm.setModifications( getModificationsForSearchHit( searchHit, params, isOpenMod, isPTMProphet ) );
+			psm.setModifications( getModificationsForSearchHit(searchHit, params) );
 		} catch( Throwable t ) {
 			
 			System.err.println( "Error getting mods for PSM. Error was: " + t.getMessage() );
@@ -404,7 +404,7 @@ public class TPPParsingUtils {
 	 * @return
 	 * @throws Throwable
 	 */
-	public static Map<Integer, BigDecimal> getModificationsForSearchHit( SearchHit searchHit, MSFraggerParameters params, boolean isOpenMod, boolean isPTMProphet ) throws Throwable {
+	public static Map<Integer, BigDecimal> getModificationsForSearchHit( SearchHit searchHit, MSFraggerParameters params) throws Throwable {
 		
 		Map<Integer, BigDecimal> modMap = new HashMap<>();
 
@@ -429,10 +429,8 @@ public class TPPParsingUtils {
 
 				modMass = modMass.setScale( 4, RoundingMode.HALF_UP );	// round the mod mass to 4 decimal places
 
-				if( !isModStaticMod( aminoAcid, modMass, params ) ) {
-					if( !isOpenMod(searchHit, modMass, position, isOpenMod, isPTMProphet)) {
+				if( !isModStaticMod( aminoAcid, modMass, params ) && !isOpenMod(mod)) {
 						modMap.put(position, modMass);
-					}
 				}
 			}
 		}
@@ -440,18 +438,56 @@ public class TPPParsingUtils {
 		return modMap;
 	}
 
+	/**
+	 * Get the open modification for this search hit. If PTM prophet was used, the mod_aminoacid_mass element for this
+	 * search hit that has a source of "massdiff" will be returned as the open mod.
+	 *
+	 * Otherwise, IF the converter was run in open mod mode, the mass diff of the search_hit will be returned.
+	 *
+	 * null will be returned if there is no open mod or converter was not run in open mod mode.
+	 *
+	 * @param searchHit
+	 * @param isOpenMod
+	 * @param isPTMProphet
+	 * @return
+	 * @throws Throwable
+	 */
 	private static OpenModification getOpenModificationForSearchHit(SearchHit searchHit, boolean isOpenMod, boolean isPTMProphet) throws Throwable {
+
+		// Check for a PTM prophet open mod hit
+		if(isPTMProphet) {
+			ModInfoDataType mofo = searchHit.getModificationInfo();
+			if (mofo != null) {
+				for (ModAminoacidMass mod : mofo.getModAminoacidMass()) {
+
+					if (isOpenMod(mod)) {
+						BigDecimal modMass = BigDecimal.valueOf(mod.getVariable());
+						modMass = modMass.setScale(4, RoundingMode.HALF_UP);    // round the mod mass to 4 decimal places
+
+						Collection<Integer> positions = null;
+
+						if (isPTMProphet) {
+							positions = getPTMProphetPositionsForSearchHIt(searchHit);
+						}
+
+						return new OpenModification(modMass, positions);
+					}
+				}
+			}
+		}
+
+		/*
+			if we've gotten here, there is no PTM prophet open mod hit for this search_hit.
+
+			If converter wasn't run in open mod mode, return null
+			Otherwise, return the mass diff with no position information
+		 */
 
 		if(!isOpenMod) { return null; }
 
 		BigDecimal mass = getMassDiffForSearchHit( searchHit );
-		Collection<Integer> positions = null;
 
-		if(isPTMProphet) {
-			positions = getPTMProphetPositionsForSearchHIt(searchHit);
-		}
-
-		return new OpenModification(mass, positions);
+		return new OpenModification(mass, null);
 	}
 
 	/**
@@ -505,33 +541,14 @@ public class TPPParsingUtils {
 	}
 
 	/**
-	 * Make a best guess about whether the reported mod has been made by PTMProphet using the mass diff.
-	 * Note to whomever is reading this: it'd be nice if PTMProphet indicated this, itself.
+	 * Return true if the mod is an open mod. This is only ever true if the mod
+	 * has "massdiff" listed for its source attribute.
 	 *
-	 * Strategy: if the modded position is in the list of positions with the highest probability reported by PTMProphet,
-	 * AND if the mod mass is equal to the mass diff of the PSM (to 4 decimal places), assume this mod was created by
-	 * PTMProphet and is an open mod
-	 *
-	 * @param searchHit
-	 * @param modMass
-	 * @param position
+	 * @param mod
 	 * @return
 	 */
-	private static boolean isOpenMod(SearchHit searchHit, BigDecimal modMass, int position, boolean isOpenMod, boolean isPTMProphet) throws Throwable {
-		if( !isOpenMod ) { return false; }
-		if( !isPTMProphet ) { return false; }
-
-		Collection<Integer> ptmProphetPositions = getPTMProphetPositionsForSearchHIt(searchHit);
-		if(ptmProphetPositions != null) {
-			if(ptmProphetPositions.contains(position)) {
-				BigDecimal massDiff = getMassDiffForSearchHit(searchHit).setScale(4, RoundingMode.HALF_UP);
-				modMass = modMass.setScale(4, RoundingMode.HALF_UP);
-
-				return massDiff.equals(modMass);
-			}
-		}
-
-		return false;
+	private static boolean isOpenMod(ModAminoacidMass mod) {
+		return mod.getSource() != null && mod.getSource().equals("massdiff");
 	}
 
 	private static boolean isModStaticMod(String aminoAcid, BigDecimal modMass, MSFraggerParameters params ) {
@@ -558,10 +575,8 @@ public class TPPParsingUtils {
 	 * @return
 	 * @throws Throwable
 	 */
-	public static BigDecimal getMassDiffForSearchHit( SearchHit searchHit ) throws Throwable {
-
+	public static BigDecimal getMassDiffForSearchHit( SearchHit searchHit ) {
 		return searchHit.getMassdiff();
-
 	}
 
 	/**

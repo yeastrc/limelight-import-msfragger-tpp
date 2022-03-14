@@ -362,7 +362,7 @@ public class XMLBuilder {
 				}
 
 				// add in the open mod mass if this is an open mod search
-				if(conversionParameters.isOpenMod()) {
+				if(psm.getOpenModification() != null) {
 					PsmOpenModification xmlPsmOpenMod = new PsmOpenModification();
 					xmlPsmOpenMod.setMass(psm.getOpenModification().getMass());
 					xmlPsm.setPsmOpenModification(xmlPsmOpenMod);
